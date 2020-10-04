@@ -487,5 +487,5 @@ DEVICE="addr=$ADDR,type=n3xx,product=n320,master_clock_rate=200e6"
 # Invoke
 #
 echorun stupid_simple_pulsar --antenna $ANTENNA --device "$DEVICE" --dm $DM --freq $FREQ --logtime 60 --obstime $OBSTIME \
-   --outfile $NAME-$MJD.json --pname $NAME --refclock external --rfgain $GAIN --sky $SKY --srate $RATE \
+   --outfile psr-$NAME-$MJD.json --pname $NAME --refclock external --rfgain $GAIN --sky $SKY --srate $RATE \
    --timesrc external --width $WIDTH --period $PERIOD
