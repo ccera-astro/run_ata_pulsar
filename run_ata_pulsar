@@ -1,4 +1,13 @@
 #!/bin/bash
+#
+# An "orchestration" script for observing/folding/filterbanking
+#  pulsars--designed speciically for the ATA Gnu Radio environment
+#  which uses a pair of USRP N320s
+#
+# It sets parameters (some automagically), then calls
+#  "stupid_simple_pulsar" underneath the covers.
+#
+#
 
 #
 # The interesting bright pulsars from the ATNF database
@@ -469,7 +478,8 @@ fi
 rm -f psr_db$$
 
 #
-# We KNOW that we're using one of a pair of USRP N32x
+# We KNOW that we're using one of a pair of USRP N32x on the gnuradio1
+#   server @ ATA/HCRO
 #
 DEVICE="addr=$ADDR,type=n3xx,product=n320,master_clock_rate=200e6"
 
