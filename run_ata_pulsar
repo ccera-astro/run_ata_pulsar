@@ -388,6 +388,7 @@ WHICH_USRP=0
 OBSTIME=1800
 GAIN=20
 MASK=None
+SUBDEV="A:0"
 #
 # Parse command line
 #
@@ -441,6 +442,10 @@ do
 		  ;;
 		--mask)
 		  MASK=$2
+		  shift 2
+		  ;;
+		--subdev)
+		  SUBDEV=$2
 		  shift 2
 		  ;;
 	    *)
@@ -498,4 +503,4 @@ else
 fi
 echorun stupid_simple_pulsar --antenna $ANTENNA --device "$DEVICE" --dm $DM --freq $FREQ --logtime 60 --obstime $OBSTIME \
    --outfile psr-$NAME-$MJD.json --pname $NAME --refclock external --rfgain $GAIN --sky $SKY --srate $RATE \
-   --timesrc external --width $WIDTH --period $PERIOD $FMASK
+   --timesrc external --width $WIDTH --period $PERIOD $FMASK --subdev $SUBDEV
