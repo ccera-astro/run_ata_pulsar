@@ -399,11 +399,11 @@ do
 	      NAME=$2
 	      shift 2
 	      ;;
-	  --period)
+	  --period|p0)
 	      PERIOD=$2
 	      shift 2
 	      ;;
-	   --width)
+	   --width|w50)
 	      WIDTH=$2
 	      shift 2
 	      ;;
@@ -411,7 +411,7 @@ do
 	     RATE=$2
 	     shift 2
 	     ;;
-	   --freq)
+	   --freq|--frequency)
 	     FREQ=$2
 	     shift 2
 	     ;;
@@ -420,11 +420,11 @@ do
 	      SKY=$2
 	      shift 2
 	      ;;
-	    --which)
+	    --which|--usrp)
 	      WHICH_USRP=$2
 	      shift 2
 	      ;;
-	    --antenna)
+	    --antenna|--ant)
 	      ANTENNA=$2
 	      shift 2
 	      ;;
@@ -432,7 +432,7 @@ do
 	      DM=$2
 	      shift 2
 	      ;;
-	    --obstime)
+	    --obstime|--time)
 	      OBSTIME=$2
 		  shift 2
 		  ;;
@@ -440,7 +440,7 @@ do
 		  GAIN=$2
 		  shift 2
 		  ;;
-		--mask)
+		--mask|--rfi)
 		  MASK=$2
 		  shift 2
 		  ;;
@@ -503,4 +503,4 @@ else
 fi
 echorun stupid_simple_pulsar --antenna $ANTENNA --device "$DEVICE" --dm $DM --freq $FREQ --logtime 60 --obstime $OBSTIME \
    --outfile psr-$NAME-$MJD.json --pname $NAME --refclock external --rfgain $GAIN --sky $SKY --srate $RATE \
-   --timesrc external --width $WIDTH --period $PERIOD $FMASK --subdev $SUBDEV
+   --timesrc external --width $WIDTH --period $PERIOD $FMASK --subdev $SUBDEV --fine 1
