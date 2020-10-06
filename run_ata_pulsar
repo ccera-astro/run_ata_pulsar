@@ -466,6 +466,7 @@ do
 		 cat hlp$$
 		 rm -f hlp$$
 		 exit
+		 ;;
 	    *)
 	    echo "Unknown argument: $1"
 	    exit
@@ -507,16 +508,22 @@ rm -f psr_db$$
 #
 # Pull ephemera out of psrcat/TEMPO2
 #
-skym=`python2 -c "print '%d' % $SKY/1.0e6"`
+skym=`python2 -c "print '%d' % int($SKY/1.0e6)"`
 psrcat -db_file /usr/local/share/psrcat.db -e2 $NAME |grep -v ELONG|grep -v ELAT >par$$.par 2>/dev/null
 echo "TZRMJD               $MJD" >>par$$.par
 echo "TZRSITE              ATA" >>par$$.par
 echo "TZRFREQ              $skym" >>par$$.par
 
-tempo2 -f par$$.par -polyco "$MJD $MJD 10 12 8 ata $skym" >/dev/null 2>&1
-rm -f par$$.par
-PERIOD=`grep ata polyco_new.dat |tail -1 |awk '{print 1.0/$2}'`
-echo PERIOD calculated as $PERIOD`
+lc=`cat par$$.par|wc -l`
+if [ $lc -gt 5 ]
+then
+    MJx=`python2 -c "print $MJD+0.1"`
+    rm -f *polyco*.dat
+    tempo2 -f par$$.par -polyco "$MJD $MJx 60 12 8 ata $skym" >/dev/null 2>&1
+    rm -f par$$.par
+    PERIOD=`grep ata polyco_new.dat |tail -1 |awk '{printf ("%13.11f", 1.0/$2)}'`
+    echo PERIOD calculated as $PERIOD
+fi
 
 #
 # Snurfle through t2pred.dat and use that to set $PERIOD
@@ -532,12 +539,14 @@ DEVICE="addr=$ADDR,type=n3xx,product=n320,master_clock_rate=200e6"
 #
 # Invoke
 #
-if [ $MASK -ne "None" ]
+FMASK=""
+if [ ! $MASK =  "None" ]
 then
    FMASK="--fmask $MASK"
 else
    FMASK=""
 fi
+
 echorun stupid_simple_pulsar --antenna $ANTENNA --device "$DEVICE" --dm $DM --freq $FREQ --logtime 60 --obstime $OBSTIME \
    --outfile psr-$NAME-$MJD.json --pname $NAME --refclock external --rfgain $GAIN --sky $SKY --srate $RATE \
    --timesrc external --width $WIDTH --period $PERIOD $FMASK --subdev $SUBDEV --fine 1
