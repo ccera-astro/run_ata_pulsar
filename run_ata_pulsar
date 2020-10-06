@@ -389,6 +389,20 @@ OBSTIME=1800
 GAIN=20
 MASK=None
 SUBDEV="A:0"
+cat >hlp$$ <<!EOF!
+--name                   Set pulsar name. Default: $NAME
+--period|p0              Set period (seconds). Default: $PERIOD
+--width|w50              Set pulse width (seconds).  Default: $WIDTH
+--rate                   Set sample-rate (Hz).    Default: $RATE
+--freq|--frequency       Set tuner frequency (Hz).  Default: $FREQ
+--sky                    Set sky frequency (Hz).    Default: $SKY
+--antenna|--ant          Set USRP antenna port (RX2 or TX/RX) Default: $ANTENNA
+--dm                     Set dispersion measure. Default $DM
+--obstime|--time         Set observation time (seconds). Default: $OBSTIME
+--gain                   Set RF gain. Deault; $GAIN
+--mask|--rfi             Comma-separated list of RFI freqs (Hz).
+--subdev                 USRP sub=device (A:0, etc).  Default $SUBDEV
+!EOF!
 #
 # Parse command line
 #
@@ -448,12 +462,16 @@ do
 		  SUBDEV=$2
 		  shift 2
 		  ;;
+		 --help)
+		 cat hlp$$
+		 rm -f hlp$$
+		 exit
 	    *)
 	    echo "Unknown argument: $1"
 	    exit
 	 esac
 done
-
+rm -f hlp$$
 #
 # IF new USRPs are added they can be enumerated here
 #
@@ -485,6 +503,25 @@ else
 	echo "********Using default/command-line parameters for: $NAME ************"
 fi
 rm -f psr_db$$
+
+#
+# Pull ephemera out of psrcat/TEMPO2
+#
+skym=`python2 -c "print '%d' % $SKY/1.0e6"`
+psrcat -db_file /usr/local/share/psrcat.db -e2 $NAME |grep -v ELONG|grep -v ELAT >par$$.par 2>/dev/null
+echo "TZRMJD               $MJD" >>par$$.par
+echo "TZRSITE              ATA" >>par$$.par
+echo "TZRFREQ              $skym" >>par$$.par
+
+tempo2 -f par$$.par -polyco "$MJD $MJD 10 12 8 ata $skym" >/dev/null 2>&1
+rm -f par$$.par
+PERIOD=`grep ata polyco_new.dat |tail -1 |awk '{print 1.0/$2}'`
+echo PERIOD calculated as $PERIOD`
+
+#
+# Snurfle through t2pred.dat and use that to set $PERIOD
+#
+
 
 #
 # We KNOW that we're using one of a pair of USRP N32x on the gnuradio1
