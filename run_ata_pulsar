@@ -42,6 +42,7 @@ MASK=None
 SUBDEV="A:0"
 DEC=54.5
 RA=3.5
+DISPLAY=0
 cat >hlp$$ <<!EOF!
 --name                   Set pulsar name. Default: $NAME
 --period|p0              Set period (seconds). Default: $PERIOD
@@ -56,6 +57,7 @@ cat >hlp$$ <<!EOF!
 --gain                   Set RF gain. Deault; $GAIN
 --mask|--rfi             Comma-separated list of RFI freqs (Hz).
 --subdev                 USRP sub=device (A:0, etc).  Default $SUBDEV
+--display                ENABLE real-time display
 !EOF!
 #
 # Parse command line
@@ -120,6 +122,10 @@ do
 		 cat hlp$$
 		 rm -f hlp$$
 		 exit
+		 ;;
+		 --display)
+		 DISPLAY=1
+		 shift
 		 ;;
 	    *)
 	    echo "Unknown argument: $1"
@@ -227,7 +233,11 @@ then
 else
    FMASK=""
 fi
-
+if [ $DISPLAY -ge 1 ]
+then
+	echo "*******" Starting pulsar profile display tool--there will be a pause before it starts...
+	(sleep 10; pulsar_display --width $WIDTH --period $PERIOD --name $NAME )&
+fi
 echorun stupid_simple_pulsar --antenna $ANTENNA --device "$DEVICE" --dm $DM --freq $FREQ --logtime 60 --obstime $OBSTIME \
    --outfile psr-$NAME-$MJD.json --pname $NAME --refclock external --rfgain $GAIN --sky $SKY --srate $RATE \
    --timesrc external --width $WIDTH --period $PERIOD $FMASK --subdev $SUBDEV --fine 1 --ra $RA --dec $DEC
