@@ -397,6 +397,7 @@ cat >hlp$$ <<!EOF!
 --freq|--frequency       Set tuner frequency (Hz).  Default: $FREQ
 --sky                    Set sky frequency (Hz).    Default: $SKY
 --antenna|--ant          Set USRP antenna port (RX2 or TX/RX) Default: $ANTENNA
+--which|--usrp           Set which USRP to use.  Default: $WHICH_USRP
 --dm                     Set dispersion measure. Default $DM
 --obstime|--time         Set observation time (seconds). Default: $OBSTIME
 --gain                   Set RF gain. Deault; $GAIN
