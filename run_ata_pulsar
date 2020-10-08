@@ -124,7 +124,7 @@ do
 		 exit
 		 ;;
 		 --display)
-		 DISPLAY=1
+		 DPY=1
 		 shift
 		 ;;
 	    *)
