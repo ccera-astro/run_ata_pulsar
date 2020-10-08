@@ -236,7 +236,7 @@ fi
 if [ $DISPLAY -ge 1 ]
 then
 	echo "*******" Starting pulsar profile display tool--there will be a pause before it starts...
-	(sleep 10; profile_display --width $WIDTH --period $PERIOD --name $NAME )&
+	(sleep 10; profile_display --width $WIDTH --period $PERIOD --pname $NAME )&
 fi
 echorun stupid_simple_pulsar --antenna $ANTENNA --device "$DEVICE" --dm $DM --freq $FREQ --logtime 60 --obstime $OBSTIME \
    --outfile psr-$NAME-$MJD.json --pname $NAME --refclock external --rfgain $GAIN --sky $SKY --srate $RATE \
