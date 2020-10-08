@@ -42,7 +42,7 @@ MASK=None
 SUBDEV="A:0"
 DEC=54.5
 RA=3.5
-DISPLAY=0
+DPY=0
 cat >hlp$$ <<!EOF!
 --name                   Set pulsar name. Default: $NAME
 --period|p0              Set period (seconds). Default: $PERIOD
@@ -233,7 +233,7 @@ then
 else
    FMASK=""
 fi
-if [ $DISPLAY -ge 1 ]
+if [ $DPY -ge 1 ]
 then
 	echo "*******" Starting pulsar profile display tool--there will be a pause before it starts...
 	(sleep 10; profile_display --width $WIDTH --period $PERIOD --pname $NAME )&
