@@ -43,6 +43,8 @@ SUBDEV="A:0"
 DEC=54.5
 RA=3.5
 DPY=0
+RES=1
+DRATE=2500
 cat >hlp$$ <<!EOF!
 --name                   Set pulsar name. Default: $NAME
 --period|p0              Set period (seconds). Default: $PERIOD
@@ -58,6 +60,8 @@ cat >hlp$$ <<!EOF!
 --mask|--rfi             Comma-separated list of RFI freqs (Hz).
 --subdev                 USRP sub=device (A:0, etc).  Default $SUBDEV
 --display                ENABLE real-time display
+--drate                  Filterbank output rate. Default $DRATE
+--res                    Time bins resolution multiplier. Default $RES
 !EOF!
 #
 # Parse command line
@@ -126,6 +130,14 @@ do
 		 --display)
 		 DPY=1
 		 shift
+		 ;;
+		--drate)
+		 DRATE=$2
+		 shift 2
+		 ;;
+		--res|--resolution)
+		 RES=$2
+		 shift 2
 		 ;;
 	    *)
 	    echo "Unknown argument: $1"
@@ -240,4 +252,5 @@ then
 fi
 echorun stupid_simple_pulsar --antenna $ANTENNA --device "$DEVICE" --dm $DM --freq $FREQ --logtime 60 --obstime $OBSTIME \
    --outfile psr-$NAME-$MJD.json --pname $NAME --refclock external --rfgain $GAIN --sky $SKY --srate $RATE \
-   --timesrc external --width $WIDTH --period $PERIOD $FMASK --subdev $SUBDEV --fine 1 --ra $RA --dec $DEC
+   --timesrc external --width $WIDTH --period $PERIOD $FMASK --subdev $SUBDEV --fine 1 --ra $RA --dec $DEC \
+   --drate $DRATE --res $RES
