@@ -28,22 +28,63 @@ from astropy import log
 import pint.observatory.topo_obs
 import pint
 import sys
+import argparse
+import time
 
 def main():
     log.setLevel('ERROR')
+    
+    
     pint.observatory.topo_obs.TopoObs(
         "ata",
         aliases=["hcro"],
         itrf_xyz=[-2524263.18,   -4123529.78,     4147966.36 ]
     )
-    target_time = sys.argv[1]
-    freq = float(sys.argv[2])
-    par_file = sys.argv[3]
+    obsname = "ata"
+    newargs = False
+    for a in sys.argv:
+        if ("--" in a):
+            newargs = True
+            break
+    if (newargs == False):
+        target_time = sys.argv[1]
+        freq = float(sys.argv[2])
+        par_file = sys.argv[3]
+    
+    else:
+        parser = argparse.ArgumentParser(description="A predictor of pulsar spin")
+        parser.add_argument ("--mjd", type=float, default=(time.time()/86400.0)+40587,
+            help="The current Mean Julian Date")
+        parser.add_argument ("--freq", type=float, default=408.0,
+            help="Center frequency, in Hz")
+        parser.add_argument ("--parfile", type=str, required=True,
+            help="Name of .PAR file")
+        
+        parser.add_argument("--localxyz", type=str, default=None)
+        
+        args = parser.parse_args()
+        target_time = "%-8.2f" % args.mjd
+        freq = args.freq
+        par_file = args.parfile
+        
+        if (args.localxyz != None):
+            s = args.localxyz
+            s = xyz.split(",")
+            xyz = []
+            for x in s:
+                xyz.append(float(s))
+
+            pint.observatory.topo_obs.TopoObs(
+                "local",
+                itrf_xyz=xyz
+            )
+            obsname = "local"
+
     toa_list = []
     target_times = [Time(target_time,format='mjd')]
     freq = [freq]
     for t, f in zip(target_times, freq):
-        toa_entry = toa.TOA(t, obs="ata", freq=f)
+        toa_entry = toa.TOA(t, obs=obsname, freq=f)
         toa_list.append(toa_entry)
 
     toas = toa.get_TOAs_list(toa_list)

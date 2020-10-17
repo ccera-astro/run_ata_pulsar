@@ -251,7 +251,7 @@ then
 	(sleep 10; profile_display  )&
 fi
 echorun stupid_simple_pulsar --antenna $ANTENNA --device "$DEVICE" --dm $DM --freq $FREQ --logtime 60 --obstime $OBSTIME \
-   --outfile psr-$NAME-$MJD.json --pname $NAME --refclock external --rfgain $GAIN --sky $SKY --srate $RATE \
+    --pname $NAME --refclock external --rfgain $GAIN --sky $SKY --srate $RATE \
    --timesrc external --width $WIDTH --period $PERIOD $FMASK --subdev $SUBDEV --fine 1 --ra $RA --dec $DEC \
    --drate $DRATE --res $RES --flout 1 >psr-$NAME-$MJD.log 2>&1
 
