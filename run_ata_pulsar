@@ -186,9 +186,9 @@ DEC=`echo $DEC|awk '
 	 }
 	 hrs = ta[1]
 	 hrs += ta[2]/60.0
-	 hrs += ta[2]/3600.0
+	 hrs += ta[3]/3600.0
 	 hrs *= sgn
-	 printf ("%5.2f", hrs)
+	 printf ("%-6.2f", hrs)
 }'`
 RA=`echo $RA|sed -e 's/+//' |awk '
 /./ {split($0,ta,":")
@@ -199,11 +199,10 @@ RA=`echo $RA|sed -e 's/+//' |awk '
 	 }
 	 hrs = ta[1]
 	 hrs += ta[2]/60.0
-	 hrs += ta[2]/3600.0
+	 hrs += ta[3]/3600.0
 	 hrs *= sgn
-	 printf ("%5.2f", hrs)
-}
-'`
+	 printf ("%-6.2f", hrs)
+}'`
 else
 	echo Pulsar $NAME not found in PSRCAT
 	echo USING DEFAULT VALUES
