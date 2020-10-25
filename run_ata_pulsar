@@ -190,7 +190,7 @@ DEC=`echo $DEC|awk '
 	 hrs *= sgn
 	 printf ("%5.2f", hrs)
 }'`
-RA=`echo $RA|awk '
+RA=`echo $RA|sed -e 's/+//' |awk '
 /./ {split($0,ta,":")
 	 sgn = 1.0
 	 if (ta[1] < 0) {
