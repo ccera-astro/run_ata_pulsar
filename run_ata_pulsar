@@ -151,10 +151,10 @@ rm -f hlp$$
 #
 case $WHICH_USRP in
 	0|usrp0)
-	    ADDR=10.11.2.50
+	    ADDR=10.11.1.50
 	    ;;
 	1|usrp1)
-	    ADDR=10.11.2.52
+	    ADDR=10.11.1.52
 	    ;;
 	*)
 	echo "Unknown USRP: $WHICH_USRP"
